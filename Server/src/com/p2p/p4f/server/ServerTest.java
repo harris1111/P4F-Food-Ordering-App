@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.*;
 public class ServerTest {
-    public static void main(String[] args)
+    public static void run(String[] args)
             throws Exception {
         InetAddress host = InetAddress.getByName("localhost");
         Selector selector = Selector.open();

@@ -7,7 +7,7 @@ import java.nio.channels.*;
 import java.util.*;
 public class ClientTest {
     private static BufferedReader input = null;
-    public static void main(String[] args) throws Exception {
+    public static void run(String[] args) throws Exception {
         InetSocketAddress addr = new InetSocketAddress(
                 InetAddress.getByName("localhost"), 1234);
         Selector selector = Selector.open();
