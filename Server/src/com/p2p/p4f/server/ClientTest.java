@@ -9,7 +9,7 @@ public class ClientTest {
     private static BufferedReader input = null;
     public static void run(String[] args) throws Exception {
         InetSocketAddress addr = new InetSocketAddress(
-                InetAddress.getByName("localhost"), 1234);
+                InetAddress.getByName("192.168.1.4"), 1080);
         Selector selector = Selector.open();
         SocketChannel sc = SocketChannel.open();
         sc.configureBlocking(false);
