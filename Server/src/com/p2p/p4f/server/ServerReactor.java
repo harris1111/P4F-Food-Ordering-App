@@ -5,8 +5,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.channels.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 /**
  * The core class of the server, one main thread should only have 1 server reactor.
@@ -36,8 +35,8 @@ public class ServerReactor {
 	/**
 	 * Logs server exceptions to an output file
 	 */
-	public final static Logger log = Logger.getLogger(ServerReactor.class.getName());
-	//TODO: Missing components: packetHandlerFactory, taskProcessorFactory, WorkerThreadPool
+	public static Logger log = null;
+	//TODO: Missing components: packetHandlerFactory, taskProcessorFactory, WorkerThreadPool, DatabaseHandlerPool
 	
 	//TODO: Add missing components to the constructor
 	/**
@@ -53,7 +52,12 @@ public class ServerReactor {
 		if (bindAddr != null) {
 			addr = InetAddress.getByName(bindAddr);
 		}
-		log.addHandler(new FileHandler(loggingPath, true));
+		if (log == null) {
+			log = Logger.getLogger(ServerReactor.class.getName());
+			FileHandler fHandler = new FileHandler(loggingPath, true);
+			fHandler.setFormatter(new SimpleFormatter());
+			log.addHandler(fHandler);
+		}
 	}
 	
 	/**
@@ -131,7 +135,10 @@ public class ServerReactor {
 			//Just catch this to stop the server when calling close() method
 		}
 		catch (IOException ex) {
-			log.info(ex.getStackTrace().toString());
+			log.log(Level.INFO, "IOException - An error occured while running the server reactor!", ex);
+		}
+		finally {
+			LogManager.getLogManager().reset();
 		}
 		
 		System.out.println("The server listening on " + addr.toString() + ':' + Integer.toString(port) + " is closed!");

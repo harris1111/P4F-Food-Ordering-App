@@ -1,8 +1,13 @@
 package com.p2p.p4f.server;
 
-import java.io.IOException;
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import java.io.*;
+import java.nio.channels.FileChannel;
 import java.sql.*;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
     public void testJDBC() {
@@ -29,24 +34,35 @@ public class Main {
                             sv.start();
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            ServerReactor.log.log(Level.INFO, "Error!", e);
                         }
                     }
             );
             Thread t2 = new Thread(
                 () -> {
-                    try (Scanner sc = new Scanner(System.in)) {
-                        int input = sc.nextInt();
-                        if (input == 0)
-                            sv.close();
+                    try (DataInputStream sin = new DataInputStream(System.in)) {
+                        while (!Thread.interrupted()) {
+                            if (sin.available() > 4) {
+                                int input = sin.readInt();
+                                if (input == 0) {
+                                    sv.close();
+                                    break;
+                                }
+                            }
+                        }
                     }
                     catch (IOException e) {
-                        e.printStackTrace();
+                        System.out.println("Error occured!");
                     }
                 }
             );
             t1.start();
             t2.start();
+            t1.join();
+            if (!t1.isAlive()) {
+                System.out.println("Server thread stopped!");
+                t2.interrupt();
+            }
         }
         catch (Exception e) {
             System.out.println("Invalid bind address or logging path.");
@@ -60,7 +76,7 @@ public class Main {
         catch (Exception e) {
             e.printStackTrace();
         }*/
-        Main m = new Main();
-        m.testServerReactor(5, 1080, "192.168.1.4");
+        
+        
     }
 }
