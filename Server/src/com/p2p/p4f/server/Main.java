@@ -2,6 +2,7 @@ package com.p2p.p4f.server;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.sql.*;
@@ -70,13 +71,16 @@ public class Main {
     }
     
     public static void main(String[] args) {
-        /*try {
-            ClientTest.run(null);
+        try {
+            ServerP4F server = new ServerP4F("", 10201);
+            server.start();
+            Scanner sc = new Scanner(System.in);
+            int code = sc.nextInt();
+            if (code == 0)
+                server.closeServer();
         }
         catch (Exception e) {
             e.printStackTrace();
-        }*/
-        
-        
+        }
     }
 }

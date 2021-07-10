@@ -1,4 +1,4 @@
-package com.p2p.p4f.server;
+package tests;
 
 import java.io.*;
 import java.net.*;
